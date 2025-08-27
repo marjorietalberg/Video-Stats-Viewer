@@ -123,7 +123,27 @@ Captura largura, altura e FPS do vídeo.
 
 Configura o vídeo de saída (mp4) que será gerado após o processamento.
 ```
-- Desenhar Caixas e Contar Objetos
+
+## Definição de Cores e CSV
+```bash
+CORES = {0: (0, 255, 0), 1: (255, 165, 0), 2: (0, 0, 255)}
+csv_file = open("output/relatorio.csv", mode="w", newline="")
+csv_writer = csv.writer(csv_file)
+csv_writer.writerow(["Frame", "Pessoas", "Bicicletas", "Carros", "FPS"])
+```
+- Cada classe detectável recebe uma cor diferente para desenhar no vídeo.
+
+- Cria um arquivo CSV para salvar contagem de objetos e FPS por frame.
+
+## Detecção de Objetos
+  ```bash
+  resultados = modelo(frame_claro, verbose=False)[0]
+```
+- Aplica o modelo YOLO no frame.
+
+- verbose=False evita mensagens extras no terminal
+- 
+## Desenhar Caixas e Contar Objetos
 
 ```bash
 for box in resultados.boxes:
@@ -154,7 +174,21 @@ for box in resultados.boxes:
 ```bash
 csv_writer.writerow([frame_count, contagem[0], contagem[1], contagem[2], round(fps_real,1)])
 ```
-- Finalização
+### Exibir Contagem e FPS no Vídeo
+```bash
+contagem_texto = f"Pessoas: {contagem[0]}  |  Bicicletas: {contagem[1]}  |  Carros: {contagem[2]}"
+fps_texto      = f"FPS: {fps_real:.1f}"
+
+cv2.putText(frame_claro, contagem_texto, (10, altura-50),
+            cv2.FONT_HERSHEY_SIMPLEX, 1.2, (255,255,255), 3)
+
+cv2.putText(frame_claro, fps_texto, (10, altura-20),
+            cv2.FONT_HERSHEY_SIMPLEX, 0.7, (200,200,200), 2)
+```
+- Mostra contagem organizada no canto inferior esquerdo.
+
+- Exibe FPS de forma discreta.
+## Finalização
 ```bash
 cap.release()
 out.release()
