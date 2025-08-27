@@ -142,7 +142,7 @@ csv_writer.writerow(["Frame", "Pessoas", "Bicicletas", "Carros", "FPS"])
 - Aplica o modelo YOLO no frame.
 
 - verbose=False evita mensagens extras no terminal
-- 
+
 ## Desenhar Caixas e Contar Objetos
 
 ```bash
@@ -169,11 +169,8 @@ for box in resultados.boxes:
 
 - Incrementa a contagem de cada objeto.
 
-- Salvar Dados no CSV
 
-```bash
-csv_writer.writerow([frame_count, contagem[0], contagem[1], contagem[2], round(fps_real,1)])
-```
+
 ### Exibir Contagem e FPS no Vídeo
 ```bash
 contagem_texto = f"Pessoas: {contagem[0]}  |  Bicicletas: {contagem[1]}  |  Carros: {contagem[2]}"
@@ -187,7 +184,26 @@ cv2.putText(frame_claro, fps_texto, (10, altura-20),
 ```
 - Mostra contagem organizada no canto inferior esquerdo.
 
-- Exibe FPS de forma discreta.
+### Salvar e Mostrar o Frame
+```bash
+out.write(frame_claro)
+cv2.imshow("Detecção", frame_claro)
+if cv2.waitKey(1) & 0xFF == ord("q"):
+    break
+```
+- Salva o frame processado no vídeo de saída
+
+- Mostra o vídeo em tempo real
+
+- Permite sair pressionando **q**
+
+  
+
+  ### Salvar Dados no CSV
+
+```bash
+csv_writer.writerow([frame_count, contagem[0], contagem[1], contagem[2], round(fps_real,1)])
+```
 ## Finalização
 ```bash
 cap.release()
